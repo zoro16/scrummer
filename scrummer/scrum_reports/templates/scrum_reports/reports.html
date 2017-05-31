@@ -1,0 +1,76 @@
+{% extends 'scrum_reports/base.html' %}
+{% load crispy_forms_tags %}
+
+<style>
+{% block style %}
+ /* table {
+    table-layout: fixed;
+    word-wrap: break-word;
+    } */
+.table {
+    display:table;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+.table-row {
+    display:table-row;
+}
+.table-cell {
+    display:table-cell;
+    word-wrap: break-word;
+}
+{% endblock  %}
+</style>
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-10 col-sm-8">
+            <h2>Full Reports</h2>
+
+            {% if request.user.is_authenticated  %}
+            <div class="table">
+                <div class="table-row">
+                    <div class="table-cell col-lg-1"><h4>Person</h4></div>
+                    <div class="table-cell col-lg-3"><h4>Since Last</h4></div>
+                    <div class="table-cell col-lg-3"><h4>Before Next</h4></div>
+                    <div class="table-cell col-lg-3"><h4>Issues</h4></div>
+                    <div class="table-cell col-lg-2"><h4>Created</h4></div>
+                </div>
+                {% for row in scrumreport_list %}
+                <a class="table-row" href="{% url 'report-detail' row.pk %}">
+                    <div class="table-cell col-lg-1">{{ row.person }}</div>
+                    <div class="table-cell col-lg-3">{{ row.report_since_last }}</div>
+                    <div class="table-cell col-lg-3">{{ row.report_before_next }}</div>
+                    <div class="table-cell col-lg-3">{{ row.report_issues }}</div>
+                    <div class="table-cell col-lg-2">{{ row.created|timesince }} ago</div>
+                </a>
+                {% endfor %}
+            </div>
+
+            {% endif %}
+
+            {% block pagination %}
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <span class="page-links">
+                            {% if page_obj.has_previous %}
+                                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+                            <span class="page-current">
+                                {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                            {% if page_obj.has_next %}
+                                <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

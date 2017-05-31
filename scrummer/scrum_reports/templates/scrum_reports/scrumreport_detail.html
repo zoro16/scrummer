@@ -1,0 +1,31 @@
+{% extends 'scrum_reports/base.html' %}
+{% load crispy_forms_tags %}
+
+<style>
+{% block style %}
+ table {
+     table-layout: fixed;
+     word-wrap: break-word;
+ }
+
+{% endblock  %}
+</style>
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-10 col-sm-8">
+            {% if request.user.is_authenticated  %}
+
+            <p><strong>Since Last: </strong>{{ object.report_since_last }}</p>
+            <p><strong>Before Next: </strong>{{ object.report_before_next }}</p>
+            <p><strong>Issues: </strong>{{ object.report_issues }}</p>
+            <p><strong>Created: </strong>{{ object.created|timesince }} ago</p>
+
+            {% endif %}
+            <button class="btn btn-default">Update</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
